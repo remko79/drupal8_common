@@ -1,0 +1,5 @@
+name: Drupal 8 - Common
+description: Provides common Drupal 8 features.
+
+type: module
+core: 8.x

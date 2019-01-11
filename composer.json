@@ -1,0 +1,35 @@
+{
+  "name": "remko79/drupal8_common",
+  "description": "Basic additional features for Drupal 8.",
+  "type": "drupal-module",
+  "license": "MIT",
+  "authors": [
+    {
+      "name": "Remko Klein",
+      "email": "rklein79@users.noreply.github.com"
+    }
+  ],
+  "repositories": [
+    {
+      "type": "composer",
+      "url": "https://packages.drupal.org/8"
+    },
+    {
+      "type": "vcs",
+      "url": "https://github.com/remko79/coding-standards"
+    }
+  ],
+  "require": {
+    "drush/drush": "~8",
+    "drupal/core": "^8.6.5"
+  },
+  "require-dev": {
+    "remko79/coding-standards": "dev-master"
+  },
+  "minimum-stability": "dev",
+  "prefer-stable": true,
+  "scripts": {
+    "phpcs-all": "./vendor/bin/phpcs-check",
+    "phpcs": "./vendor/bin/phpcs-check diff"
+  }
+}

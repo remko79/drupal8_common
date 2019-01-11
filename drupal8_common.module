@@ -1,0 +1,103 @@
+<?php
+
+/**
+ * @file
+ * Module file.
+ */
+
+use Drupal\Core\Entity\EntityInterface;
+use Drupal\Core\Form\FormStateInterface;
+use Drupal\node\NodeInterface;
+use Drupal\taxonomy\TermInterface;
+use rklein79\drupal8_common\Event\FormEvent;
+use rklein79\drupal8_common\Event\NodeEvent;
+use rklein79\drupal8_common\Event\TermEvent;
+
+/**
+ * Implements hook_form_alter().
+ */
+function drupal8_common_form_alter(&$form, FormStateInterface $form_state, $form_id) {
+  _drupal8_common_get_dispatcher()->dispatch(FormEvent::FORM_ALTER, new FormEvent($form, $form_state, $form_id));
+}
+
+/**
+ * Implements hook_form_BASE_FORM_ID_alter() for \Drupal\node\NodeForm.
+ */
+function drupal8_common_form_node_form_alter(&$form, FormStateInterface $form_state, $form_id) {
+  _drupal8_common_get_dispatcher()->dispatch(FormEvent::NODE_FORM_ALTER, new FormEvent($form, $form_state, $form_id));
+}
+
+/**
+ * Implements hook_ENTITY_TYPE_presave() for node entities.
+ */
+function drupal8_common_node_presave(EntityInterface $entity) {
+  if ($entity instanceof NodeInterface) {
+    _drupal8_common_get_dispatcher()->dispatch(NodeEvent::NODE_PRESAVE, new NodeEvent($entity));
+  }
+}
+
+/**
+ * Implements hook_ENTITY_TYPE_insert() for node entities.
+ */
+function drupal8_common_node_insert(EntityInterface $entity) {
+  if ($entity instanceof NodeInterface) {
+    _drupal8_common_get_dispatcher()->dispatch(NodeEvent::NODE_INSERT, new NodeEvent($entity));
+  }
+}
+
+/**
+ * Implements hook_ENTITY_TYPE_update() for node entities.
+ */
+function drupal8_common_node_update(EntityInterface $entity) {
+  if ($entity instanceof NodeInterface) {
+    _drupal8_common_get_dispatcher()->dispatch(NodeEvent::NODE_UPDATE, new NodeEvent($entity));
+  }
+}
+
+/**
+ * Implements hook_ENTITY_TYPE_delete() for node entities.
+ */
+function drupal8_common_node_delete(EntityInterface $entity) {
+  if ($entity instanceof NodeInterface) {
+    _drupal8_common_get_dispatcher()->dispatch(NodeEvent::NODE_DELETE, new NodeEvent($entity));
+  }
+}
+
+/**
+ * Implements hook_ENTITY_TYPE_insert().
+ */
+function drupal8_common_taxonomy_term_insert(EntityInterface $entity) {
+  if ($entity instanceof TermInterface) {
+    _drupal8_common_get_dispatcher()->dispatch(TermEvent::TERM_INSERT, new TermEvent($entity));
+  }
+}
+
+/**
+ * Implements hook_ENTITY_TYPE_update().
+ */
+function drupal8_common_taxonomy_term_update(EntityInterface $entity) {
+  if ($entity instanceof TermInterface) {
+    _drupal8_common_get_dispatcher()->dispatch(TermEvent::TERM_UPDATE, new TermEvent($entity));
+  }
+}
+
+/**
+ * Implements hook_ENTITY_TYPE_delete().
+ */
+function drupal8_common_taxonomy_term_delete(EntityInterface $entity) {
+  if ($entity instanceof TermInterface) {
+    _drupal8_common_get_dispatcher()->dispatch(TermEvent::TERM_DELETE, new TermEvent($entity));
+  }
+}
+
+/**
+ * Get the default event dispatcher.
+ *
+ * @return \Symfony\Component\EventDispatcher\EventDispatcherInterface
+ *   The event dispatcher.
+ */
+function _drupal8_common_get_dispatcher() {
+  /* @var \Symfony\Component\EventDispatcher\EventDispatcherInterface $event_dispatcher */
+  $event_dispatcher = Drupal::service('event_dispatcher');
+  return $event_dispatcher;
+}
